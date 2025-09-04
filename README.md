@@ -15,4 +15,4 @@ I hope that friends will contribute to this project and help me complete it.
 Each contributor creates his/her own recommendation and feedback in the people directory and in a directory named after him/her. For example, Mr. Hashem creates his recommendation in **people/hashem/**
 
 If you're kind enough to take the time, I'd prefer you to create and write this feedback yourself, but if needed, I've prepared a sample file that you can click on the link below to view.
-[sample file🧾](SAMPLE.md)
+[sample file🧾](TEMPLATE.md)
