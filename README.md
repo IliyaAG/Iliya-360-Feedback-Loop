@@ -10,6 +10,7 @@ I hope that friends will contribute to this project and help me complete it.
   - 💯 All pull requests are merged with the project. 💯
   - ✅ Recommendations can be in markdown, html, txt, an image, or a combination of these formats or creative structures that are suitable for the GitHub environment. ✅
   - 📝 I don't make any changes to anyone's files except typos or syntax errors. 📝
+  - 🌏 You can write your feedback in Persian or English or even bilingually. 🌏
 
 ### Project structure
 Each contributor creates his/her own recommendation and feedback in the people directory and in a directory named after him/her. For example, Mr. **Hashem** creates his recommendation in **people/hashem/**
