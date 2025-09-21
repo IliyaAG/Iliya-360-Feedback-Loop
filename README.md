@@ -17,3 +17,7 @@ Each contributor creates his/her own recommendation and feedback in the people d
 
 If you're kind enough to take the time, I'd prefer you to create and write this feedback yourself, but if needed, I've prepared a sample file that you can click on the link below to view.
 [sample file🧾](TEMPLATE.md)
+
+### Feedback list:
+
+ - [danial akbari](people/danial-akbari)
