@@ -21,5 +21,15 @@ If you're kind enough to take the time, I'd prefer you to create and write this 
 ### Feedback list:
 
  - [danial akbari](people/danial-akbari)
+> Danial Akbari
+IRANSITE
+2025
 
+
+---
  - [emad pourkaveh](people/emad-pourkaveh)
+> Emad Pourkaveh
+IRANSITE
+2025
+---
+
