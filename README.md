@@ -34,7 +34,7 @@ IRANSITE
 ---
 
 ---
- - [Masoud Goudarzi](people/Masoud-Goodarzi)
+ - [Masoud Goudarzi](https://iliyaag.github.io/Iliya-360-Feedback-Loop/masoud/)
 > Masoud Goodarzi
 IRANSITE
 2024
