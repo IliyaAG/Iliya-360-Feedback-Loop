@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Farzad">
+    <meta name="description" content="Deploy Hero - A DevOps Timing Game">
+    <title>Deploy Hero | Production Crisis Simulator</title>
+    <style>
+        :root {
+            --bg-dark: #0d1117;
+            --bg-secondary: #161b22;
+            --primary-green: #39d353;
+            --accent-blue: #58a6ff;
+            --accent-yellow: #f0c800;
+            --accent-red: #f85149;
+            --text-primary: #c9d1d9;
+            --border-color: #30363d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            overflow: hidden;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .game-wrapper {
+            width: 95vw;
+            max-width: 1000px;
+            height: 95vh;
+            background: rgba(22, 27, 34, 0.8);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            padding: 25px;
+        }
+
+        .terminal-header {
+            text-align: center;
+            padding: 15px;
+            border-bottom: 2px solid var(--primary-green);
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .terminal-header h1 {
+            font-size: 1.8rem;
+            color: var(--primary-green);
+            text-shadow: 0 0 15px rgba(57, 211, 83, 0.5);
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .terminal-header .subtitle {
+            font-size: 0.9rem;
+            color: var(--accent-blue);
+            margin-top: 8px;
+            opacity: 0.8;
+        }
+
+        .screen {
+            display: none;
+            flex: 1;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .screen.visible {
+            display: flex;
+        }
+
+        /* Intro Screen Styles */
+        .intro-content {
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .alert-box {
+            background: rgba(248, 81, 73, 0.1);
+            border: 2px solid var(--accent-red);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .alert-line {
+            font-size: 1.15rem;
+            margin: 15px 0;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideInFade 0.6s ease-out forwards;
+        }
+
+        .alert-line:nth-child(1) { animation-delay: 0.3s; }
+        .alert-line:nth-child(2) { animation-delay: 0.8s; }
+        .alert-line:nth-child(3) { animation-delay: 1.3s; }
+        .alert-line:nth-child(4) { animation-delay: 1.8s; }
+
+        @keyframes slideInFade {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .start-prompt {
+            font-size: 1.3rem;
+            color: var(--primary-green);
+            animation: pulse 2s ease-in-out infinite;
+            margin-top: 20px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+
+        /* Game Screen Styles */
+        .stats-bar {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            display: flex;
+            gap: 20px;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stat-success { color: var(--primary-green); }
+        .stat-fail { color: var(--accent-red); }
+
+        .stage-display {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .stage-name {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: 5px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .stage-subtitle {
+            font-size: 1rem;
+            opacity: 0.7;
+            margin-bottom: 10px;
+        }
+
+        /* Progress Bar Styles */
+        .timing-container {
+            width: 600px;
+            position: relative;
+        }
+
+        .progress-wrapper {
+            height: 70px;
+            background: var(--bg-dark);
+            border: 3px solid currentColor;
+            border-radius: 35px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, currentColor, currentColor);
+            border-radius: 35px;
+            transition: width 0.04s linear;
+            box-shadow: 0 0 25px currentColor;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 30px;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3));
+        }
+
+        .target-zone {
+            position: absolute;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent,
+                rgba(57, 211, 83, 0.3),
+                rgba(57, 211, 83, 0.5),
+                rgba(57, 211, 83, 0.3),
+                transparent
+            );
+            border-left: 3px solid var(--primary-green);
+            border-right: 3px solid var(--primary-green);
+            animation: glowZone 1s ease-in-out infinite;
+            z-index: 10;
+        }
+
+        @keyframes glowZone {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(57, 211, 83, 0.6);
+                opacity: 0.7;
+            }
+            50% { 
+                box-shadow: 0 0 40px rgba(57, 211, 83, 1);
+                opacity: 1;
+            }
+        }
+
+        .action-hint {
+            margin-top: 35px;
+            font-size: 1.4rem;
+            color: var(--primary-green);
+            font-weight: 700;
+            text-align: center;
+            animation: blink 1.5s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 49%, 100% { opacity: 1; }
+            50%, 99% { opacity: 0.3; }
+        }
+
+        /* Stage Color Themes */
+        .theme-build { color: var(--accent-blue); }
+        .theme-test { color: var(--accent-yellow); }
+        .theme-deploy { color: var(--accent-red); }
+        .theme-hotfix { color: var(--primary-green); }
+
+        /* End Screen Styles */
+        .result-container {
+            text-align: center;
+            max-width: 700px;
+        }
+
+        .result-title {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 25px;
+            text-shadow: 0 0 20px currentColor;
+        }
+
+        .result-message {
+            font-size: 1.3rem;
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+
+        .final-stats {
+            font-size: 1.2rem;
+            margin: 30px 0;
+            padding: 20px;
+            background: var(--bg-dark);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .restart-button {
+            margin-top: 35px;
+            padding: 18px 50px;
+            background: transparent;
+            border: 3px solid var(--primary-green);
+            color: var(--primary-green);
+            font-family: inherit;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .restart-button:hover {
+            background: var(--primary-green);
+            color: var(--bg-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 25px rgba(57, 211, 83, 0.5);
+        }
+
+        .restart-hint {
+            margin-top: 15px;
+            font-size: 0.95rem;
+            opacity: 0.6;
+        }
+
+        /* Console Logs */
+        .console-logs {
+            margin-top: auto;
+            height: 140px;
+            overflow: hidden;
+            border-top: 1px solid var(--border-color);
+            padding-top: 15px;
+        }
+
+        .log-entry {
+            font-size: 0.88rem;
+            margin: 5px 0;
+            opacity: 0;
+            animation: fadeInLog 0.4s ease forwards;
+            font-family: 'Consolas', monospace;
+        }
+
+        @keyframes fadeInLog {
+            to { opacity: 0.75; }
+        }
+
+        .log-entry.info { color: var(--accent-blue); }
+        .log-entry.warning { color: var(--accent-yellow); }
+        .log-entry.error { color: var(--accent-red); }
+        .log-entry.success { color: var(--primary-green); }
+
+        .log-entry::before {
+            content: '> ';
+            opacity: 0.5;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .timing-container {
+                width: 90%;
+            }
+            .stage-name {
+                font-size: 2rem;
+            }
+            .result-title {
+                font-size: 2rem;
+            }
+            .stats-bar {
+                position: static;
+                justify-content: center;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-wrapper">
+        <div class="terminal-header">
+            <h1>⚡ DEPLOY HERO ⚡</h1>
+            <div class="subtitle">Production Crisis Management System</div>
+        </div>
+
+        <!-- Intro Screen -->
+        <div class="screen visible" id="introScreen">
+            <div class="intro-content">
+                <div class="alert-box">
+                    <div class="alert-line">🚨 CRITICAL: Production environment unstable</div>
+                    <div class="alert-line">🔴 CI/CD Pipeline failure detected</div>
+                    <div class="alert-line">⚠️ Docker containers desynchronized</div>
+                    <div class="alert-line">💥 Emergency deployment protocol required</div>
+                </div>
+                <div class="start-prompt">▶ Press SPACEBAR to initiate deployment</div>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div class="screen" id="gameScreen">
+            <div class="stats-bar">
+                <div class="stat-item stat-success">
+                    ✓ <span id="successCounter">0</span>
+                </div>
+                <div class="stat-item stat-fail">
+                    ✗ <span id="failCounter">0</span>
+                </div>
+            </div>
+            
+            <div class="stage-display">
+                <div class="stage-name" id="stageName"></div>
+                <div class="stage-subtitle" id="stageSubtitle"></div>
+            </div>
+
+            <div class="timing-container">
+                <div class="progress-wrapper" id="progressWrapper">
+                    <div class="target-zone" id="targetZone"></div>
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="action-hint">⌨ HIT SPACEBAR IN GREEN ZONE!</div>
+            </div>
+        </div>
+
+        <!-- End Screen -->
+        <div class="screen" id="endScreen">
+            <div class="result-container">
+                <h2 class="result-title" id="resultTitle"></h2>
+                <p class="result-message" id="resultMessage"></p>
+                <div class="final-stats" id="finalStats"></div>
+                <button class="restart-button" onclick="initializeGame()">
+                    🔄 New Deployment
+                </button>
+                <p class="restart-hint">or press R to restart</p>
+            </div>
+        </div>
+
+        <!-- Console Logs -->
+        <div class="console-logs" id="consoleLogs"></div>
+    </div>
+
+    <script>
+        // Audio System
+        const AudioEngine = {
+            context: new (window.AudioContext || window.webkitAudioContext)(),
+            
+            play(freq, duration, type = 'sine') {
+                const osc = this.context.createOscillator();
+                const gain = this.context.createGain();
+                
+                osc.connect(gain);
+                gain.connect(this.context.destination);
+                
+                osc.type = type;
+                osc.frequency.value = freq;
+                
+                gain.gain.setValueAtTime(0.25, this.context.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, this.context.currentTime + duration);
+                
+                osc.start();
+                osc.stop(this.context.currentTime + duration);
+            },
+            
+            playSuccess() {
+                this.play(880, 0.15);
+                setTimeout(() => this.play(1100, 0.1), 100);
+            },
+            
+            playFail() {
+                this.play(220, 0.25);
+                setTimeout(() => this.play(180, 0.2), 150);
+            }
+        };
+
+        // Game Configuration
+        const STAGES = [
+            {
+                id: 'build',
+                name: 'BUILD',
+                emoji: '⚙️',
+                subtitle: 'Compiling source code...',
+                theme: 'theme-build',
+                speed: 1.4
+            },
+            {
+                id: 'test',
+                name: 'TEST',
+                emoji: '🧪',
+                subtitle: 'Running test suites...',
+                theme: 'theme-test',
+                speed: 1.7
+            },
+            {
+                id: 'deploy',
+                name: 'DEPLOY',
+                emoji: '🚀',
+                subtitle: 'Deploying to production...',
+                theme: 'theme-deploy',
+                speed: 2.1
+            },
+            {
+                id: 'hotfix',
+                name: 'HOTFIX',
+                emoji: '🔧',
+                subtitle: 'Applying emergency patch...',
+                theme: 'theme-hotfix',
+                speed: 2.4
+            }
+        ];
+
+        const CONSOLE_MESSAGES = {
+            info: [
+                "npm install completed... only 847 vulnerabilities",
+                "Docker image build in progress... layer 23 of 47",
+                "Running integration tests... fingers crossed 🤞",
+                "Loading environment variables from .env.production",
+                "Kubernetes pods scaling... 2/15 ready",
+                "Database migration running... hope you backed up",
+                "Redis cache warming up... patience is a virtue",
+                "Webpack bundling assets... this may take a while"
+            ],
+            warning: [
+                "Certificate expires in 7 days... someone should handle that",
+                "Memory usage at 87%... but still technically fine",
+                "It's probably DNS... it's always DNS",
+                "Deprecated API detected... TODO: fix this later",
+                "Build cache invalidated... again",
+                "Flaky test detected in CI... *marks as skip*",
+                "Production and staging configs look identical 🤔",
+                "Last deployment was on Friday 5pm... bold move"
+            ],
+            error: [
+                "Null pointer exception in UserService.java:237",
+                "CORS policy blocked request... backend drama continues",
+                "Database connection pool exhausted... RIP",
+                "Out of memory: Java heap space (classic)",
+                "Segmentation fault (core dumped)",
+                "Rate limit exceeded: 429 Too Many Requests",
+                "Module not found: Can't resolve '../utils/magic'",
+                "Uncaught TypeError: Cannot read property 'data' of undefined"
+            ],
+            success: [
+                "All tests passed! (we only ran 3 of them)",
+                "Deployment successful... monitoring intensifies",
+                "Zero downtime achieved... this time",
+                "Load balancer health check: green across all zones",
+                "No rollback needed... that's a first",
+                "Production traffic stable... CPU at 12%",
+                "Database queries optimized... 10x improvement",
+                "Code coverage: 78%... not bad actually"
+            ]
+        };
+
+        // Game State
+        let gameState = {
+            currentStage: 0,
+            progress: 0,
+            targetStart: 0,
+            targetEnd: 0,
+            successes: 0,
+            fails: 0,
+            isRunning: false,
+            animationFrame: null,
+            direction: 1
+        };
+
+        // DOM Elements
+        const screens = {
+            intro: document.getElementById('introScreen'),
+            game: document.getElementById('gameScreen'),
+            end: document.getElementById('endScreen')
+        };
+
+        const elements = {
+            stageName: document.getElementById('stageName'),
+            stageSubtitle: document.getElementById('stageSubtitle'),
+            progressFill: document.getElementById('progressFill'),
+            progressWrapper: document.getElementById('progressWrapper'),
+            targetZone: document.getElementById('targetZone'),
+            successCounter: document.getElementById('successCounter'),
+            failCounter: document.getElementById('failCounter'),
+            consoleLogs: document.getElementById('consoleLogs'),
+            resultTitle: document.getElementById('resultTitle'),
+            resultMessage: document.getElementById('resultMessage'),
+            finalStats: document.getElementById('finalStats')
+        };
+
+        // Console Logger
+        const Logger = {
+            add(message, type = 'info') {
+                const entry = document.createElement('div');
+                entry.className = `log-entry ${type}`;
+                entry.textContent = message;
+                elements.consoleLogs.insertBefore(entry, elements.consoleLogs.firstChild);
+                
+                while (elements.consoleLogs.children.length > 5) {
+                    elements.consoleLogs.removeChild(elements.consoleLogs.lastChild);
+                }
+            },
+            
+            random() {
+                const types = ['info', 'warning', 'error'];
+                const type = types[Math.floor(Math.random() * types.length)];
+                const messages = CONSOLE_MESSAGES[type];
+                this.add(messages[Math.floor(Math.random() * messages.length)], type);
+            }
+        };
+
+        // Screen Manager
+        function showScreen(screenName) {
+            Object.values(screens).forEach(s => s.classList.remove('visible'));
+            screens[screenName].classList.add('visible');
+        }
+
+        // Stage Controller
+        function startStage() {
+            if (gameState.currentStage >= STAGES.length) {
+                endGame();
+                return;
+            }
+
+            const stage = STAGES[gameState.currentStage];
+            gameState.progress = 0;
+            gameState.direction = 1;
+            
+            // Update UI
+            elements.stageName.textContent = `${stage.emoji} ${stage.name}`;
+            elements.stageName.className = `stage-name ${stage.theme}`;
+            elements.stageSubtitle.textContent = stage.subtitle;
+            elements.progressFill.className = `progress-fill ${stage.theme}`;
+            elements.progressWrapper.style.borderColor = getComputedStyle(elements.progressFill).color;
+            
+            // Set random target zone (20-75%)
+            gameState.targetStart = 20 + Math.random() * 55;
+            gameState.targetEnd = gameState.targetStart + 12;
+            
+            elements.targetZone.style.left = gameState.targetStart + '%';
+            elements.targetZone.style.width = '12%';
+            
+            Logger.add(`Initiating ${stage.name} phase...`, 'info');
+            
+            // Start animation
+            animateProgress(stage.speed);
+        }
+
+        function animateProgress(speed) {
+            function update() {
+                gameState.progress += 0.45 * speed * gameState.direction;
+                
+                if (gameState.progress >= 100) {
+                    gameState.progress = 100;
+                    gameState.direction = -1;
+                } else if (gameState.progress <= 0) {
+                    gameState.progress = 0;
+                    gameState.direction = 1;
+                }
+                
+                elements.progressFill.style.width = gameState.progress + '%';
+                
+                if (gameState.isRunning) {
+                    gameState.animationFrame = requestAnimationFrame(update);
+                }
+            }
+            
+            update();
+        }
+
+        function checkDeployment() {
+            if (!gameState.isRunning) return;
+            
+            const inZone = gameState.progress >= gameState.targetStart && 
+                          gameState.progress <= gameState.targetEnd;
+            
+            cancelAnimationFrame(gameState.animationFrame);
+            
+            if (inZone) {
+                gameState.successes++;
+                elements.successCounter.textContent = gameState.successes;
+                AudioEngine.playSuccess();
+                Logger.add(
+                    CONSOLE_MESSAGES.success[Math.floor(Math.random() * CONSOLE_MESSAGES.success.length)],
+                    'success'
+                );
+                
+                setTimeout(() => {
+                    gameState.currentStage++;
+                    startStage();
+                }, 800);
+            } else {
+                gameState.fails++;
+                elements.failCounter.textContent = gameState.fails;
+                AudioEngine.playFail();
+                Logger.add(
+                    CONSOLE_MESSAGES.error[Math.floor(Math.random() * CONSOLE_MESSAGES.error.length)],
+                    'error'
+                );
+                
+                setTimeout(() => {
+                    gameState.currentStage++;
+                    startStage();
+                }, 1200);
+            }
+        }
+
+        function endGame() {
+            gameState.isRunning = false;
+            cancelAnimationFrame(gameState.animationFrame);
+            showScreen('end');
+            
+            const accuracy = (gameState.successes / STAGES.length) * 100;
+            
+            let title, message, theme;
+            
+            if (accuracy === 100) {
+                title = '🏆 FLAWLESS DEPLOYMENT';
+                message = 'Perfect execution! You are a certified DevOps legend. The infrastructure team wants to hire you immediately.';
+                theme = 'theme-hotfix';
+                Logger.add('All systems operational. Crisis averted! 🎉', 'success');
+            } else if (accuracy >= 75) {
+                title = '✅ DEPLOYMENT SUCCESSFUL';
+                message = 'Production stabilized. Minor hiccups but overall solid work. The team respects your timing.';
+                theme = 'theme-build';
+                Logger.add('Deployment completed with acceptable performance.', 'success');
+            } else if (accuracy >= 50) {
+                title = '⚠️ PARTIAL FAILURE';
+                message = 'Some services degraded. Rollback procedures initiated. It was probably DNS anyway.';
+                theme = 'theme-test';
+                Logger.add('System partially recovered. Monitoring continues.', 'warning');
+            } else {
+                title = '💥 PRODUCTION MELTDOWN';
+                message = 'CRITICAL FAILURE: CFO has scheduled an emergency meeting. LinkedIn profile update recommended.';
+                theme = 'theme-deploy';
+                Logger.add('FATAL: Multiple systems down. All hands on deck!', 'error');
+            }
+            
+            elements.resultTitle.textContent = title;
+            elements.resultTitle.className = `result-title ${theme}`;
+            elements.resultMessage.textContent = message;
+            elements.finalStats.innerHTML = `
+                <div>Successful Deployments: ${gameState.successes}</div>
+                <div>Failed Deployments: ${gameState.fails}</div>
+                <div>Success Rate: ${accuracy.toFixed(1)}%</div>
+            `;
+        }
+
+        function initializeGame() {
+            gameState = {
+                currentStage: 0,
+                progress: 0,
+                targetStart: 0,
+                targetEnd: 0,
+                successes: 0,
+                fails: 0,
+                isRunning: false,
+                animationFrame: null,
+                direction: 1
+            };
+            
+            elements.successCounter.textContent = '0';
+            elements.failCounter.textContent = '0';
+            elements.consoleLogs.innerHTML = '';
+            
+            showScreen('intro');
+            Logger.add('System initialized. Awaiting deployment command...', 'info');
+        }
+
+        function startGame() {
+            showScreen('game');
+            gameState.isRunning = true;
+            Logger.add('Deployment sequence initiated...', 'info');
+            startStage();
+        }
+
+        // Event Handlers
+        document.addEventListener('keydown', (event) => {
+            if (event.code === 'Space') {
+                event.preventDefault();
+                
+                if (screens.intro.classList.contains('visible')) {
+                    startGame();
+                } else if (screens.game.classList.contains('visible')) {
+                    checkDeployment();
+                }
+            }
+            
+            if (event.code === 'KeyR' && screens.end.classList.contains('visible')) {
+                initializeGame();
+            }
+        });
+
+        // Random log generator
+        setInterval(() => {
+            if (gameState.isRunning) {
+                Logger.random();
+            }
+        }, 2500);
+
+        // Initialize
+
+        Logger.add('Heeeeeeeeello - FarzadHr', 'info');
+        Logger.add('Deploy Hero v1.0 - Ready for production chaos', 'info');
+    </script>
+</body>
+</html>
