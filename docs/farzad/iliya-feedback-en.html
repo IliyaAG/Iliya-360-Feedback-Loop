@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback - Iliya</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            line-height: 1.8;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 50px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 15s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .author-info {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            display: inline-block;
+            margin-top: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .author-info p {
+            margin: 8px 0;
+            font-size: 1.1em;
+        }
+
+        .author-info strong {
+            color: #ffd700;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            animation: slideIn 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .section:nth-child(1) { animation-delay: 0.1s; }
+        .section:nth-child(2) { animation-delay: 0.2s; }
+        .section:nth-child(3) { animation-delay: 0.3s; }
+        .section:nth-child(4) { animation-delay: 0.4s; }
+        .section:nth-child(5) { animation-delay: 0.5s; }
+        .section:nth-child(6) { animation-delay: 0.6s; }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .section-icon {
+            font-size: 1.2em;
+        }
+
+        .section-content {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+            line-height: 2;
+            font-size: 1.1em;
+            color: #333;
+        }
+
+        .strengths .section-content {
+            border-left-color: #28a745;
+        }
+
+        .strengths .section-title {
+            color: #28a745;
+            border-bottom-color: #28a745;
+        }
+
+        .growth .section-content {
+            border-left-color: #ffc107;
+        }
+
+        .growth .section-title {
+            color: #ffc107;
+            border-bottom-color: #ffc107;
+        }
+
+        .suggestions .section-content {
+            border-left-color: #17a2b8;
+        }
+
+        .suggestions .section-title {
+            color: #17a2b8;
+            border-bottom-color: #17a2b8;
+        }
+
+        .summary .section-content {
+            border-left-color: #6f42c1;
+        }
+
+        .summary .section-title {
+            color: #6f42c1;
+            border-bottom-color: #6f42c1;
+        }
+
+        .memory .section-content {
+            border-left-color: #fd7e14;
+            background: linear-gradient(135deg, #fff5e6 0%, #ffe8cc 100%);
+        }
+
+        .memory .section-title {
+            color: #fd7e14;
+            border-bottom-color: #fd7e14;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #ffd70040 0%, #ffd70080 100%);
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .footer {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .section-title {
+                font-size: 1.4em;
+            }
+
+            .section-content {
+                font-size: 1em;
+            }
+        }
+
+        .emoji-large {
+            font-size: 1.3em;
+            margin: 0 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1> Professional Feedback</h1>
+            <div class="author-info">
+                <p><strong>Name:</strong> Farzad</p>
+                <p><strong>Relationship:</strong> Colleague at IranSite Company</p>
+                <p><strong>Year of acquaintance:</strong> 2024</p>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="section strengths">
+                <h2 class="section-title">
+                    Strengths
+                </h2>
+                <div class="section-content">
+                    Iliya was one of those people you could always rely on.<br>
+                    His learning curve was impressive — whenever he needed to pick up something new, he stayed focused and got it done quickly.<br>
+                    He handled tasks responsibly and carefully, never rushing into decisions before reviewing everything properly.<br>
+                    Thanks to his solid <span class="highlight">DevOps skills</span> (especially <span class="highlight">Docker and Kubernetes</span>), whenever there was a technical problem, he was the first name that came to mind.<br>
+                    He was responsive, polite, and easy to work with — making the whole work environment more positive and dependable.
+                </div>
+            </div>
+
+            <div class="section growth">
+                <h2 class="section-title">
+                    Areas for Growth
+                </h2>
+                <div class="section-content">
+                    If I have to say one thing (mostly as an inside joke), it would be <span class="highlight">JavaScript</span> <span class="emoji-large">😄</span><br>
+                    But honestly, it's not really a weakness — more like one of those friendly jokes between teammates.
+                </div>
+            </div>
+
+            <div class="section suggestions">
+                <h2 class="section-title">
+                    Suggestions for Development
+                </h2>
+                <div class="section-content">
+                    Continuing in the <span class="highlight">DevOps field</span> is definitely the right path for him, since it's a domain that evolves constantly and matches perfectly with his learning mindset.<br>
+                    If there's one small suggestion, it would be <span class="highlight">documenting his work</span> more often — because what he knows could benefit others in the team, too.
+                </div>
+            </div>
+
+            <div class="section summary">
+                <h2 class="section-title">
+                    Overall Feedback
+                </h2>
+                <div class="section-content">
+                    Getting to know and work (even indirectly) with Iliya was truly valuable for me.<br>
+                    Although we weren't directly on the same team, I learned a lot from our interactions and conversations.<br>
+                    His presence always brings both professionalism and calm to the team — he's highly skilled and easy to work alongside.
+                </div>
+            </div>
+
+            <div class="section memory">
+                <h2 class="section-title">
+                    Shared Memory
+                </h2>
+                <div class="section-content">
+                    Honestly, as I'm writing this, it's around 1 A.M., and nothing specific comes to mind<br>
+                    Most of our memories were just those everyday work moments — I'll keep the special ones for the next update!
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p> Wishing you continued success</p>
+            <p style="margin-top: 10px; opacity: 0.9;">Date: November 11, 2025</p>
+        </div>
+    </div>
+</body>
+</html>
