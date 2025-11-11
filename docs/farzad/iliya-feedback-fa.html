@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فیدبک - ایلیا</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            line-height: 1.8;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 50px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 15s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .author-info {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            display: inline-block;
+            margin-top: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .author-info p {
+            margin: 8px 0;
+            font-size: 1.1em;
+        }
+
+        .author-info strong {
+            color: #ffd700;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            animation: slideIn 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .section:nth-child(1) { animation-delay: 0.1s; }
+        .section:nth-child(2) { animation-delay: 0.2s; }
+        .section:nth-child(3) { animation-delay: 0.3s; }
+        .section:nth-child(4) { animation-delay: 0.4s; }
+        .section:nth-child(5) { animation-delay: 0.5s; }
+        .section:nth-child(6) { animation-delay: 0.6s; }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .section-icon {
+            font-size: 1.2em;
+        }
+
+        .section-content {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            border-right: 5px solid #667eea;
+            line-height: 2;
+            font-size: 1.1em;
+            color: #333;
+        }
+
+        .strengths .section-content {
+            border-right-color: #28a745;
+        }
+
+        .strengths .section-title {
+            color: #28a745;
+            border-bottom-color: #28a745;
+        }
+
+        .growth .section-content {
+            border-right-color: #ffc107;
+        }
+
+        .growth .section-title {
+            color: #ffc107;
+            border-bottom-color: #ffc107;
+        }
+
+        .suggestions .section-content {
+            border-right-color: #17a2b8;
+        }
+
+        .suggestions .section-title {
+            color: #17a2b8;
+            border-bottom-color: #17a2b8;
+        }
+
+        .summary .section-content {
+            border-right-color: #6f42c1;
+        }
+
+        .summary .section-title {
+            color: #6f42c1;
+            border-bottom-color: #6f42c1;
+        }
+
+        .memory .section-content {
+            border-right-color: #fd7e14;
+            background: linear-gradient(135deg, #fff5e6 0%, #ffe8cc 100%);
+        }
+
+        .memory .section-title {
+            color: #fd7e14;
+            border-bottom-color: #fd7e14;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #ffd70040 0%, #ffd70080 100%);
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .footer {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .section-title {
+                font-size: 1.4em;
+            }
+
+            .section-content {
+                font-size: 1em;
+            }
+        }
+
+        .emoji-large {
+            font-size: 1.3em;
+            margin: 0 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>فیدبک همکاری</h1>
+            <div class="author-info">
+                <p><strong>نویسنده:</strong> فرزاد</p>
+                <p><strong>رابطه:</strong> همکار در شرکت ایران سایت</p>
+                <p><strong>سال آشنایی:</strong> 1403</p>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="section strengths">
+                <h2 class="section-title">
+                    نقاط قوت
+                </h2>
+                <div class="section-content">
+                    ایلیا از اون آدم‌هایی بود که همیشه می‌شد روش حساب کرد.<br>
+                    یادگیریش واقعاً سریع بود و هر چیزی که نیاز داشت یاد بگیره رو با تمرکز کامل جلو می‌برد.<br>
+                    کارهاش همیشه دقیق و با مسئولیت انجام می‌شد و قبل از هر تصمیمی، کار رو کامل بررسی می‌کرد.<br>
+                    به خاطر تسلط بالا در حوزه <span class="highlight">DevOps</span> (خصوصاً <span class="highlight">Docker و Kubernetes</span>) عملاً هر موقع مشکلی پیش می‌اومد، اولین اسم تو ذهن همه ایلیا بود.<br>
+                    پاسخ‌هاش همیشه سریع و مؤدبانه بود و همین باعث می‌شد فضای کاری باهاش راحت، مثبت و قابل اعتماد باشه.
+                </div>
+            </div>
+
+            <div class="section growth">
+                <h2 class="section-title">
+                    زمینه‌های رشد
+                </h2>
+                <div class="section-content">
+                    اگه بخوام به شوخی بگم، فقط <span class="highlight">جاوااسکریپت!</span><br>
+                    اما در کل چیزی نیست که واقعاً بخوام به‌عنوان نقطه ضعف حسابش کنم؛ بیشتر از جنس اون شوخی‌های بین همکاریاست.
+                </div>
+            </div>
+
+            <div class="section suggestions">
+                <h2 class="section-title">
+                    پیشنهاد رشد
+                </h2>
+                <div class="section-content">
+                    به نظرم ادامه مسیر در حوزه <span class="highlight">DevOps</span> برای ایلیا انتخاب درستی‌ه چون این حوزه هر روز چیز جدیدی برای یاد گرفتن داره و با روحیه یادگیری بالاش کاملاً سازگاره.<br>
+                    اگه بخوام نکته‌ای اضافه کنم، شاید <span class="highlight">مستندسازی بیشتر</span> کارهاش بتونه کمک کنه که دانشش راحت‌تر بین بقیه منتقل بشه.
+                </div>
+            </div>
+
+            <div class="section summary">
+                <h2 class="section-title">
+                    جمع‌بندی کلی
+                </h2>
+                <div class="section-content">
+                    تجربه آشنایی و همکاری غیرمستقیم با ایلیا برای من خیلی مفید بود.<br>
+                    با اینکه ما مستقیماً هم‌تیمی نبودیم، اما همیشه از حرف‌ها و راهنمایی‌هاش نکته‌های زیادی یاد گرفتم.<br>
+                    حضورش تو هر تیمی باعث پیشرفت و آرامش بقیه میشه، چون هم فنیه و هم با برخورد خوبش فضای مثبتی می‌سازه.
+                </div>
+            </div>
+
+            <div class="section memory">
+                <h2 class="section-title">
+                    خاطره مشترک
+                </h2>
+                <div class="section-content">
+                    خب راستش الان که دارم این متن هارو اوکی میکنم ساعت تقریبا 1 شبه و چیز خاصی یادم نمیاد<br>
+                    بالاخره خاطرات روزمره بودن ولی چیز خاصی یادم نمیاد میزارم برای آپدیت بعدی!
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p> با آرزوی موفقیت روزافزون</p>
+            <p style="margin-top: 10px; opacity: 0.9;">تاریخ: 1404/08/20</p>
+        </div>
+    </div>
+</body>
+</html>
