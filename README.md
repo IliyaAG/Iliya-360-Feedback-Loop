@@ -20,11 +20,12 @@ If you're kind enough to take the time, I'd prefer you to create and write this 
 
 ### Feedback list:
 
+---
  - [danial akbari](people/danial-akbari)
 > Danial Akbari
 IRANSITE
 2025
-
+---
 
 ---
  - [emad pourkaveh](people/emad-pourkaveh)
@@ -36,6 +37,15 @@ IRANSITE
 ---
  - [Masoud Goudarzi](https://iliyaag.github.io/Iliya-360-Feedback-Loop/masoud/)
 > Masoud Goodarzi
+IRANSITE
+2024
+---
+
+---
+ - [Farzad Heydari](https://iliyaag.github.io/Iliya-360-Feedback-Loop/farzad/iliya-feedback-en.html)
+ [To Persian](https://iliyaag.github.io/Iliya-360-Feedback-Loop/farzad/iliya-feedback-fa.html)
+ And the [game](https://iliyaag.github.io/Iliya-360-Feedback-Loop/farzad/game-deploy-hero.html), so that this ripo doesn't get too bored
+> Farzad Heydari
 IRANSITE
 2024
 ---
