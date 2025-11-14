@@ -18,6 +18,9 @@ Each contributor creates his/her own recommendation and feedback in the people d
 If you're kind enough to take the time, I'd prefer you to create and write this feedback yourself, but if needed, I've prepared a sample file that you can click on the link below to view.
 [sample file🧾](TEMPLATE.md)
 
+Also, if you want to create a static page, you can create a folder in the docs directory with your name and put your files there (the **docs** directory is the root of the **github pages** project) where you can see the html projects in the bios view.
+[Project Github Pages](https://iliyaag.github.io/Iliya-360-Feedback-Loop/)
+
 ### Feedback list:
 
 ---
@@ -25,27 +28,24 @@ If you're kind enough to take the time, I'd prefer you to create and write this 
 > Danial Akbari
 IRANSITE
 2025
----
 
----
  - [emad pourkaveh](people/emad-pourkaveh)
 > Emad Pourkaveh
 IRANSITE
 2025
----
 
----
  - [Masoud Goudarzi](https://iliyaag.github.io/Iliya-360-Feedback-Loop/masoud/)
 > Masoud Goodarzi
 IRANSITE
 2024
----
 
----
  - [Farzad Heydari](https://iliyaag.github.io/Iliya-360-Feedback-Loop/farzad/iliya-feedback-en.html)
- [To Persian](https://iliyaag.github.io/Iliya-360-Feedback-Loop/farzad/iliya-feedback-fa.html)
- And the [game](https://iliyaag.github.io/Iliya-360-Feedback-Loop/farzad/game-deploy-hero.html), so that this ripo doesn't get too bored
+
+[To Persian](https://iliyaag.github.io/Iliya-360-Feedback-Loop/farzad/iliya-feedback-fa.html)
+
+And the [game](https://iliyaag.github.io/Iliya-360-Feedback-Loop/farzad/game-deploy-hero.html), so that this ripo doesn't get too bored
 > Farzad Heydari
 IRANSITE
 2024
 ---
+
