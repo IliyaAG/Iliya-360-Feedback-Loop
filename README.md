@@ -29,7 +29,7 @@ Also, if you want to create a static page, you can create a folder in the docs d
 IRANSITE
 2025
 
- - [emad pourkaveh](people/emad-pourkaveh)
+ - [emad pourkaveh](https://iliyaag.github.io/Iliya-360-Feedback-Loop/emad/)
 > Emad Pourkaveh
 IRANSITE
 2025
